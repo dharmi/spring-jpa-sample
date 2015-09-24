@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd">
+
+	<!-- Database -->
+	<!-- jdbc:embedded-database id="datasource" type="H2"></jdbc:embedded-database-->
+
+	<!-- Entity Manager -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="datasource" />
+		<property name="persistenceUnitName" value="tothought-tutorial-test" />
+	</bean>
+
+	<!-- Transaction Manager -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	<bean id="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	    <!-- Connection properties -->
+	    <property name="driverClass" value="org.h2.Driver" />
+	    <property name="jdbcUrl" value="jdbc:h2:~/test" />
+	    <property name="user" value="sa" />
+	    <property name="password" value="" />
+	    <!-- Pool properties -->
+	    <property name="minPoolSize" value="5" />
+	    <property name="maxPoolSize" value="20" />
+	    <property name="acquireIncrement" value="1" />
+	    <property name="maxStatements" value="50" />
+	    <property name="idleConnectionTestPeriod" value="3000" />
+	    <property name="loginTimeout" value="300" />
+	</bean>
+	
+	<!-- Jpa Repositories -->
+	<jpa:repositories base-package="com.adobe.repositories"></jpa:repositories>
+</beans>
